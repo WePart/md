@@ -189,7 +189,7 @@ export function initRenderer(opts: IOpts) {
     listitem(item: Tokens.ListItem): string {
       const prefix = isOrdered ? `${listIndex + 1}. ` : `• `
       const content = item.tokens.map(t => (this[t.type as keyof Renderer] as <T>(token: T) => string)(t)).join(``)
-      return `<li style="text-align: left;line-height: 1.75;text-indent: -1em;display: block;margin: 0.5em 8px;"><p>${prefix}${content}</p></li>`
+      return `<li style="text-indent: -1em;display: block;margin: 0.5em 8px;"><p>${prefix}${content}</p></li>`
     },
 
     list({ ordered, items }: Tokens.List): string {
@@ -201,9 +201,20 @@ export function initRenderer(opts: IOpts) {
         listItems.push(this.listitem(item))
       }
       const label = ordered ? `ol` : `ul`
-      const listStyle = `list-style: none;padding-left: 1.5em;line-height: 1.75;`
+      const listStyle = `list-style: none;padding-left: 1.5em;`
+      
+      const sectionStyle = `
+        --md-primary-color: #556B2F;
+        text-align: justify;
+        line-height: 1.75;
+        font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+        font-size: 15px;
+        margin: 1.5em 8px;
+        letter-spacing: 0.1em;
+        color: var(--el-text-color-regular);
+      `.replace(/\n\s*/g, '')
 
-      return `<section>
+      return `<section style="${sectionStyle}">
         <${label} style="${listStyle}" class="list-paddingleft-1">
           ${listItems.join(``)}
         </${label}>
