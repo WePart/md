@@ -189,7 +189,7 @@ export function initRenderer(opts: IOpts) {
     listitem(item: Tokens.ListItem): string {
       const prefix = isOrdered ? `${listIndex + 1}. ` : `• `
       const content = item.tokens.map(t => (this[t.type as keyof Renderer] as <T>(token: T) => string)(t)).join(``)
-      return styledContent(`listitem`, `${prefix}${content}`, `li`)
+      return `<section><span leaf="">${prefix}${content}</span></section>`
     },
 
     list({ ordered, items }: Tokens.List): string {
@@ -200,9 +200,10 @@ export function initRenderer(opts: IOpts) {
         const item = items[i]
         listItems.push(this.listitem(item))
       }
+      const style = ordered ? `` : `list-style-type: circle`
+      const className = `list-paddingleft-1`
       const label = ordered ? `ol` : `ul`
-      const listContent = styledContent(label, listItems.join(``))
-      return `<section style="box-sizing: border-box;">${listContent}</section>`
+      return `<section><${label} style="${style}" class="${className}">${listItems.join(``)}</${label}></section>`
     },
 
     image({ href, title, text }: Tokens.Image): string {
