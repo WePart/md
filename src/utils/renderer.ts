@@ -201,7 +201,8 @@ export function initRenderer(opts: IOpts) {
         listItems.push(this.listitem(item))
       }
       const label = ordered ? `ol` : `ul`
-      return styledContent(label, listItems.join(``))
+      const listContent = styledContent(label, listItems.join(``))
+      return `<section style="box-sizing: border-box;">${listContent}</section>`
     },
 
     image({ href, title, text }: Tokens.Image): string {
