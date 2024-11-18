@@ -143,7 +143,20 @@ export function initRenderer(opts: IOpts) {
     heading({ tokens, depth }: Tokens.Heading) {
       const text = this.parser.parseInline(tokens)
       const tag = `h${depth}`
-      return styledContent(tag, text)
+      const headingStyle = `
+        --md-primary-color: #556B2F;
+        text-align: justify;
+        line-height: 1.75;
+        font-family: -apple-system-font, BlinkMacSystemFont, Helvetica Neue, PingFang SC, Hiragino Sans GB, Microsoft YaHei UI, Microsoft YaHei, Arial, sans-serif;
+        font-size: 15px;
+        margin: 1.5em 8px;
+        letter-spacing: 0.1em;
+        color: var(--el-text-color-regular);
+      `.replace(/\n\s*/g, '')
+      
+      return `<section style="${headingStyle}">
+        <${tag} ${styles(tag)}>${text}</${tag}>
+      </section>`
     },
 
     paragraph({ tokens }: Tokens.Paragraph): string {
