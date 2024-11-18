@@ -189,7 +189,7 @@ export function initRenderer(opts: IOpts) {
     listitem(item: Tokens.ListItem): string {
       const prefix = isOrdered ? `${listIndex + 1}. ` : `• `
       const content = item.tokens.map(t => (this[t.type as keyof Renderer] as <T>(token: T) => string)(t)).join(``)
-      return `<section><span leaf="">${prefix}${content}</span></section>`
+      return `<li style="border-width: 0px;border-style: solid;border-color: hsl(var(--border));text-align: left;line-height: 1.75;text-indent: -1em;display: block;margin: 0.5em 8px;"><p>${prefix}${content}</p></li>`
     },
 
     list({ ordered, items }: Tokens.List): string {
@@ -200,10 +200,16 @@ export function initRenderer(opts: IOpts) {
         const item = items[i]
         listItems.push(this.listitem(item))
       }
-      const style = ordered ? `` : `list-style-type: circle`
-      const className = `list-paddingleft-1`
       const label = ordered ? `ol` : `ul`
-      return `<section><${label} style="${style}" class="${className}">${listItems.join(``)}</${label}></section>`
+      const listStyle = ordered 
+        ? `border-width: 0px;border-style: solid;border-color: hsl(var(--border));list-style: none;padding-left: 1.5em;line-height: 1.75;font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;font-size: 15px;color: rgb(63, 63, 63);`
+        : `border-width: 0px;border-style: solid;border-color: hsl(var(--border));list-style: none;padding-left: 1.5em;line-height: 1.75;font-family: -apple-system-font, BlinkMacSystemFont, "Helvetica Neue", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;font-size: 15px;color: rgb(63, 63, 63);`
+
+      return `<section style="border-width: 0px;border-style: solid;border-color: hsl(var(--border));color: rgb(10, 10, 10);font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';font-size: 14px;letter-spacing: normal;text-align: start;background-color: rgb(255, 255, 255);">
+        <${label} style="${listStyle}" class="list-paddingleft-1">
+          ${listItems.join(``)}
+        </${label}>
+      </section>`
     },
 
     image({ href, title, text }: Tokens.Image): string {
